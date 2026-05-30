@@ -25,15 +25,61 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html { scroll-behavior: smooth; }
-  body {
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* LOGIN */
+  .login-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .login-card {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 340px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .login-icon { font-size: 40px; margin-bottom: 1rem; }
+  .login-card h2 { font-family: 'DM Serif Display', serif; font-size: 24px; margin-bottom: 6px; }
+  .login-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .login-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
     background: var(--bg);
     color: var(--text);
-    min-height: 100vh;
-    padding-bottom: 80px;
+    margin-bottom: 10px;
+    outline: none;
+    transition: border 0.15s;
   }
+  .login-input:focus { border-color: var(--accent); }
+  .login-btn {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .login-btn:active { opacity: 0.85; }
+  .login-error { font-size: 12px; color: var(--warn); margin-top: 8px; display: none; }
 
-  /* HEADER */
+  /* APP */
+  .app-wrap { display: none; padding-bottom: 80px; }
+
   .hero {
     background: var(--accent);
     padding: 2.5rem 1.25rem 3.5rem;
@@ -56,27 +102,23 @@
     border: 1px solid rgba(255,255,255,0.06);
     bottom: -40px; left: 20px;
   }
-  .hero-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
-    margin-bottom: 8px;
-  }
-  .hero h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 32px;
+  .hero-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: 32px; color: #fff; line-height: 1.15; margin-bottom: 6px; }
+  .hero-sub { font-size: 13px; color: rgba(255,255,255,0.6); }
+  .online-badge {
+    position: absolute;
+    top: 1.25rem; right: 1.25rem;
+    background: rgba(255,255,255,0.15);
     color: #fff;
-    line-height: 1.15;
-    margin-bottom: 6px;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
-  .hero-sub {
-    font-size: 13px;
-    color: rgba(255,255,255,0.6);
-  }
+  .online-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
 
-  /* STATS CARD */
   .stats-float {
     margin: -28px 1.25rem 1.25rem;
     background: var(--surface);
@@ -86,61 +128,24 @@
     position: relative;
     z-index: 10;
   }
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    margin-bottom: 14px;
-  }
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-bottom: 14px; }
   .stat { text-align: center; }
   .stat + .stat { border-left: 1px solid var(--border); }
-  .stat-val {
-    font-size: 26px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1;
-    margin-bottom: 3px;
-  }
+  .stat-val { font-size: 26px; font-weight: 600; color: var(--text); line-height: 1; margin-bottom: 3px; }
   .stat-val.green { color: var(--accent); }
   .stat-lbl { font-size: 11px; color: var(--text-muted); }
-  .prog-track {
-    height: 8px;
-    background: var(--surface2);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .prog-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-mid), var(--accent));
-    border-radius: 10px;
-    transition: width 0.5s cubic-bezier(.4,0,.2,1);
-  }
-  .prog-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 6px;
-  }
+  .prog-track { height: 8px; background: var(--surface2); border-radius: 10px; overflow: hidden; }
+  .prog-fill { height: 100%; background: linear-gradient(90deg, var(--accent-mid), var(--accent)); border-radius: 10px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+  .prog-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 6px; }
 
-  /* BODY */
   .body { padding: 0 1.25rem; }
 
-  /* FILTERS */
-  .filters {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 1rem;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    scrollbar-width: none;
-  }
+  .filters { display: flex; gap: 6px; margin-bottom: 1rem; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
   .filters::-webkit-scrollbar { display: none; }
   .filter-btn {
     white-space: nowrap;
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 12px; font-weight: 500;
     padding: 6px 14px;
     border-radius: 20px;
     border: 1px solid var(--border);
@@ -149,206 +154,138 @@
     cursor: pointer;
     transition: all 0.15s;
   }
-  .filter-btn.active {
-    background: var(--text);
-    color: #fff;
-    border-color: var(--text);
-  }
+  .filter-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
 
-  /* ROOM CARDS */
   .rooms { display: flex; flex-direction: column; gap: 10px; }
-  .room-card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
-  .room-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 16px;
-    cursor: pointer;
-    user-select: none;
-  }
+  .room-card { background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+  .room-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; cursor: pointer; user-select: none; }
   .room-emoji { font-size: 20px; flex-shrink: 0; }
   .room-info { flex: 1; min-width: 0; }
   .room-name { font-size: 14px; font-weight: 500; color: var(--text); }
   .room-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-  .room-mini-bar {
-    width: 48px; flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-  }
+  .room-mini-bar { width: 48px; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
   .room-pct { font-size: 11px; font-weight: 600; color: var(--accent); }
-  .mini-track {
-    width: 100%;
-    height: 4px;
-    background: var(--surface2);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .mini-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 4px;
-    transition: width 0.4s ease;
-  }
-  .chevron {
-    font-size: 16px;
-    color: var(--text-faint);
-    transition: transform 0.2s;
-    flex-shrink: 0;
-    margin-left: 4px;
-  }
+  .mini-track { width: 100%; height: 4px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+  .mini-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.4s ease; }
+  .chevron { font-size: 16px; color: var(--text-faint); transition: transform 0.2s; flex-shrink: 0; margin-left: 4px; }
   .chevron.open { transform: rotate(180deg); }
-
   .room-items { display: none; }
   .room-items.open { display: block; }
-  .item-divider { height: 1px; background: var(--border); margin: 0 16px; }
-
-  .item-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 13px 16px;
-    cursor: pointer;
-    transition: background 0.12s;
-    position: relative;
-  }
+  .item-row { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; transition: background 0.12s; }
   .item-row:active { background: var(--surface2); }
   .item-row:first-child { border-top: 1px solid var(--border); }
-
-  .cb {
-    width: 22px; height: 22px;
-    border-radius: 6px;
-    border: 1.5px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.18s;
-    background: var(--surface);
-  }
-  .cb.on {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
+  .cb { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.18s; background: var(--surface); }
+  .cb.on { background: var(--accent); border-color: var(--accent); }
   .cb svg { display: none; }
   .cb.on svg { display: block; }
-
   .item-text { flex: 1; font-size: 14px; color: var(--text); transition: color 0.15s; }
   .item-text.done { color: var(--text-faint); text-decoration: line-through; }
-  .badge-opt {
-    font-size: 10px; font-weight: 500;
-    padding: 2px 7px;
-    border-radius: 10px;
-    background: var(--warn-light);
-    color: var(--warn);
-    flex-shrink: 0;
-  }
+  .badge-opt { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 10px; background: var(--warn-light); color: var(--warn); flex-shrink: 0; }
 
-  /* EMPTY STATE */
-  .empty {
-    text-align: center;
-    padding: 2.5rem 1rem;
-    color: var(--text-muted);
-    font-size: 14px;
-  }
+  .empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 14px; }
   .empty-icon { font-size: 32px; margin-bottom: 8px; }
 
-  /* SHARE BTN */
   .fab {
-    position: fixed;
-    bottom: 24px;
-    right: 20px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 28px;
+    position: fixed; bottom: 24px; right: 20px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 28px;
     padding: 14px 20px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 7px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; gap: 7px;
     box-shadow: 0 4px 20px rgba(42,92,69,0.35);
-    transition: transform 0.15s, box-shadow 0.15s;
-    z-index: 100;
+    transition: transform 0.15s, box-shadow 0.15s; z-index: 100;
   }
-  .fab:active { transform: scale(0.97); box-shadow: 0 2px 12px rgba(42,92,69,0.3); }
+  .fab:active { transform: scale(0.97); }
 
-  /* TOAST */
   .toast {
-    position: fixed;
-    bottom: 80px;
-    left: 50%;
+    position: fixed; bottom: 80px; left: 50%;
     transform: translateX(-50%) translateY(20px);
-    background: var(--text);
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 20px;
-    font-size: 13px;
-    opacity: 0;
-    transition: all 0.25s;
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: 200;
+    background: var(--text); color: #fff;
+    padding: 10px 18px; border-radius: 20px;
+    font-size: 13px; opacity: 0;
+    transition: all 0.25s; pointer-events: none;
+    white-space: nowrap; z-index: 200;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .sync-indicator {
+    position: fixed; top: 12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent); color: #fff;
+    font-size: 11px; padding: 4px 12px;
+    border-radius: 20px; opacity: 0;
+    transition: opacity 0.3s; z-index: 300;
+    pointer-events: none;
+  }
+  .sync-indicator.show { opacity: 1; }
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-label">Nossa mudança</div>
-  <h1>Lista de<br>Compras</h1>
-  <div class="hero-sub">Toque para marcar o que já foi comprado</div>
-</div>
-
-<div class="stats-float">
-  <div class="stats-row">
-    <div class="stat">
-      <div class="stat-val" id="s-total">0</div>
-      <div class="stat-lbl">Total</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val green" id="s-done">0</div>
-      <div class="stat-lbl">Comprados</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val" id="s-left">0</div>
-      <div class="stat-lbl">Pendentes</div>
-    </div>
-  </div>
-  <div class="prog-track">
-    <div class="prog-fill" id="main-fill" style="width:0%"></div>
-  </div>
-  <div class="prog-label">
-    <span>Progresso geral</span>
-    <span id="main-pct">0%</span>
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-card">
+    <div class="login-icon">🏠</div>
+    <h2>Lista da Mudança</h2>
+    <p>Digite a senha para acessar</p>
+    <input type="password" class="login-input" id="senha-input" placeholder="Senha" onkeydown="if(event.key==='Enter')entrar()">
+    <button class="login-btn" onclick="entrar()">Entrar</button>
+    <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
   </div>
 </div>
 
-<div class="body">
-  <div class="filters">
-    <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
-    <button class="filter-btn" onclick="setFilter('pending',this)">Pendentes</button>
-    <button class="filter-btn" onclick="setFilter('done',this)">Comprados</button>
+<!-- APP -->
+<div class="app-wrap" id="app-screen">
+  <div class="hero">
+    <div class="online-badge"><div class="online-dot"></div> Sincronizado</div>
+    <div class="hero-label">Nossa mudança</div>
+    <h1>Lista de<br>Compras</h1>
+    <div class="hero-sub">Toque para marcar o que já foi comprado</div>
   </div>
-  <div class="rooms" id="rooms-list"></div>
+
+  <div class="stats-float">
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val" id="s-total">0</div><div class="stat-lbl">Total</div></div>
+      <div class="stat"><div class="stat-val green" id="s-done">0</div><div class="stat-lbl">Comprados</div></div>
+      <div class="stat"><div class="stat-val" id="s-left">0</div><div class="stat-lbl">Pendentes</div></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="main-fill" style="width:0%"></div></div>
+    <div class="prog-label"><span>Progresso geral</span><span id="main-pct">0%</span></div>
+  </div>
+
+  <div class="body">
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
+      <button class="filter-btn" onclick="setFilter('pending',this)">Pendentes</button>
+      <button class="filter-btn" onclick="setFilter('done',this)">Comprados</button>
+    </div>
+    <div class="rooms" id="rooms-list"></div>
+  </div>
 </div>
 
-<button class="fab" onclick="share()">
+<button class="fab" id="fab-btn" onclick="share()" style="display:none">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
   Compartilhar
 </button>
 
 <div class="toast" id="toast"></div>
+<div class="sync-indicator" id="sync-ind">Salvando...</div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD_WBr-shB7D7cWU3wJ1kTGJrzwwPiId0k",
+  authDomain: "lista-mudanca-96d60.firebaseapp.com",
+  databaseURL: "https://lista-mudanca-96d60-default-rtdb.firebaseio.com",
+  projectId: "lista-mudanca-96d60",
+  storageBucket: "lista-mudanca-96d60.firebasestorage.app",
+  messagingSenderId: "234390816705",
+  appId: "1:234390816705:web:2aaf9380cb6477aea71140"
+};
+
+const SENHA = "saj740176";
 const ROOMS = [
   { id:'cozinha', name:'Cozinha', emoji:'🍳', items:[
     {id:'c1',l:'Armários'},{id:'c2',l:'Torneira'},{id:'c3',l:'Cuba'},
@@ -381,42 +318,62 @@ const ROOMS = [
   ]}
 ];
 
-const KEY = 'mudanca_v1';
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const dbRef = ref(db, 'lista');
+
 let checked = {};
 let openRooms = { cozinha: true };
 let filter = 'all';
+let isListening = false;
 
-function loadState() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) { const d = JSON.parse(raw); checked = d.checked||{}; openRooms = d.openRooms||{cozinha:true}; }
-  } catch(e) {}
+// LOGIN
+window.entrar = function() {
+  const val = document.getElementById('senha-input').value;
+  if (val === SENHA) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    document.getElementById('fab-btn').style.display = 'flex';
+    initFirebase();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
 }
 
-function saveState() {
-  try { localStorage.setItem(KEY, JSON.stringify({ checked, openRooms })); } catch(e) {}
+function initFirebase() {
+  onValue(dbRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data && data.checked) checked = data.checked;
+    else checked = {};
+    render();
+  });
 }
 
-function toggle(id) {
+function showSync() {
+  const el = document.getElementById('sync-ind');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1200);
+}
+
+window.toggle = function(id) {
   checked[id] = !checked[id];
-  saveState();
-  render();
+  showSync();
+  update(dbRef, { checked });
 }
 
-function toggleRoom(id) {
+window.toggleRoom = function(id) {
   openRooms[id] = !openRooms[id];
-  saveState();
   render();
 }
 
-function setFilter(f, el) {
+window.setFilter = function(f, el) {
   filter = f;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
   render();
 }
 
-function share() {
+window.share = function() {
   const url = window.location.href.split('?')[0];
   const all = ROOMS.flatMap(r => r.items);
   const done = all.filter(i => checked[i.id]).length;
@@ -427,8 +384,7 @@ function share() {
   } else if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => showToast('Link copiado! Cole no WhatsApp 📋'));
   } else {
-    const wa = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(wa, '_blank');
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
   }
 }
 
@@ -481,7 +437,7 @@ function render() {
       </div>
       <div class="room-items ${isOpen?'open':''}">`;
 
-    filtered.forEach((it, idx) => {
+    filtered.forEach(it => {
       const on = !!checked[it.id];
       html += `<div class="item-row" onclick="toggle('${it.id}')">
         <div class="cb ${on?'on':''}">
@@ -496,14 +452,11 @@ function render() {
   });
 
   if (!html) {
-    html = `<div class="empty"><div class="empty-icon">${filter==='done'?'🎉':'✅'}</div>${filter==='done'?'Nenhum item comprado ainda.':'Tudo comprado!'}</div>`;
+    html = `<div class="empty"><div class="empty-icon">${filter==='done'?'🎉':'✅'}</div>${filter==='done'?'Nenhum item comprado ainda.':'Tudo comprado! 🎉'}</div>`;
   }
 
   list.innerHTML = html;
 }
-
-loadState();
-render();
 </script>
 </body>
 </html>
