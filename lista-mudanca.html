@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista da Mudança 🏠</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F2ED;
+    --surface: #FFFFFF;
+    --surface2: #EDEAE4;
+    --border: #DDD9D0;
+    --text: #1A1815;
+    --text-muted: #7A7570;
+    --text-faint: #B0ABA4;
+    --accent: #2A5C45;
+    --accent-light: #EAF3EE;
+    --accent-mid: #5E9E82;
+    --warn: #C4622D;
+    --warn-light: #FBF0EA;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* HEADER */
+  .hero {
+    background: var(--accent);
+    padding: 2.5rem 1.25rem 3.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+    top: -80px; right: -60px;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+    bottom: -40px; left: 20px;
+  }
+  .hero-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 8px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* STATS CARD */
+  .stats-float {
+    margin: -28px 1.25rem 1.25rem;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 10;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-bottom: 14px;
+  }
+  .stat { text-align: center; }
+  .stat + .stat { border-left: 1px solid var(--border); }
+  .stat-val {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+  .stat-val.green { color: var(--accent); }
+  .stat-lbl { font-size: 11px; color: var(--text-muted); }
+  .prog-track {
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-mid), var(--accent));
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  .prog-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* BODY */
+  .body { padding: 0 1.25rem; }
+
+  /* FILTERS */
+  .filters {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn.active {
+    background: var(--text);
+    color: #fff;
+    border-color: var(--text);
+  }
+
+  /* ROOM CARDS */
+  .rooms { display: flex; flex-direction: column; gap: 10px; }
+  .room-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .room-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .room-emoji { font-size: 20px; flex-shrink: 0; }
+  .room-info { flex: 1; min-width: 0; }
+  .room-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .room-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .room-mini-bar {
+    width: 48px; flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .room-pct { font-size: 11px; font-weight: 600; color: var(--accent); }
+  .mini-track {
+    width: 100%;
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .mini-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .chevron {
+    font-size: 16px;
+    color: var(--text-faint);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+  .chevron.open { transform: rotate(180deg); }
+
+  .room-items { display: none; }
+  .room-items.open { display: block; }
+  .item-divider { height: 1px; background: var(--border); margin: 0 16px; }
+
+  .item-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    cursor: pointer;
+    transition: background 0.12s;
+    position: relative;
+  }
+  .item-row:active { background: var(--surface2); }
+  .item-row:first-child { border-top: 1px solid var(--border); }
+
+  .cb {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.18s;
+    background: var(--surface);
+  }
+  .cb.on {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .cb svg { display: none; }
+  .cb.on svg { display: block; }
+
+  .item-text { flex: 1; font-size: 14px; color: var(--text); transition: color 0.15s; }
+  .item-text.done { color: var(--text-faint); text-decoration: line-through; }
+  .badge-opt {
+    font-size: 10px; font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: var(--warn-light);
+    color: var(--warn);
+    flex-shrink: 0;
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .empty-icon { font-size: 32px; margin-bottom: 8px; }
+
+  /* SHARE BTN */
+  .fab {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 28px;
+    padding: 14px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 20px rgba(42,92,69,0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    z-index: 100;
+  }
+  .fab:active { transform: scale(0.97); box-shadow: 0 2px 12px rgba(42,92,69,0.3); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--text);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    opacity: 0;
+    transition: all 0.25s;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 200;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">Nossa mudança</div>
+  <h1>Lista de<br>Compras</h1>
+  <div class="hero-sub">Toque para marcar o que já foi comprado</div>
+</div>
+
+<div class="stats-float">
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-val" id="s-total">0</div>
+      <div class="stat-lbl">Total</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val green" id="s-done">0</div>
+      <div class="stat-lbl">Comprados</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="s-left">0</div>
+      <div class="stat-lbl">Pendentes</div>
+    </div>
+  </div>
+  <div class="prog-track">
+    <div class="prog-fill" id="main-fill" style="width:0%"></div>
+  </div>
+  <div class="prog-label">
+    <span>Progresso geral</span>
+    <span id="main-pct">0%</span>
+  </div>
+</div>
+
+<div class="body">
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
+    <button class="filter-btn" onclick="setFilter('pending',this)">Pendentes</button>
+    <button class="filter-btn" onclick="setFilter('done',this)">Comprados</button>
+  </div>
+  <div class="rooms" id="rooms-list"></div>
+</div>
+
+<button class="fab" onclick="share()">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+  Compartilhar
+</button>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ROOMS = [
+  { id:'cozinha', name:'Cozinha', emoji:'🍳', items:[
+    {id:'c1',l:'Armários'},{id:'c2',l:'Torneira'},{id:'c3',l:'Cuba'},
+    {id:'c4',l:'Geladeira'},{id:'c5',l:'Fogão'},{id:'c6',l:'Micro-ondas'},
+    {id:'c7',l:'Lava-louças',opt:true},{id:'c8',l:'Mesa de jantar com 4 cadeiras'},
+    {id:'c9',l:'Papel de parede'}
+  ]},
+  { id:'sala', name:'Sala', emoji:'🛋️', items:[
+    {id:'s1',l:'TV'},{id:'s2',l:'Sofá'},{id:'s3',l:'Aparador / rack atrás do sofá'},
+    {id:'s4',l:'Tapete'},{id:'s5',l:'Puff e mesa de canto'},{id:'s6',l:'Papel de parede'}
+  ]},
+  { id:'lavanderia', name:'Lavanderia', emoji:'🫧', items:[
+    {id:'lv1',l:'Máquina de lavar'},{id:'lv2',l:'Máquina de secar'},{id:'lv3',l:'Tanque'},
+    {id:'lv4',l:'Torneira'},{id:'lv5',l:'Divisória de vidro'},{id:'lv6',l:'Pedra / armário'},
+    {id:'lv7',l:'Piso'}
+  ]},
+  { id:'lavabo', name:'Lavabo', emoji:'🪥', items:[
+    {id:'lb1',l:'Torneira'},{id:'lb2',l:'Prateleira'},{id:'lb3',l:'Papel de parede'},
+    {id:'lb4',l:'Espelho'},{id:'lb5',l:'Lixeira'}
+  ]},
+  { id:'escritorio', name:'Escritório', emoji:'💻', items:[
+    {id:'e1',l:'Guarda-roupa'},{id:'e2',l:'Sofá-cama'},{id:'e3',l:'Papel de parede ou tinta'},
+    {id:'e4',l:'Tapete'},{id:'e5',l:'Escrivaninha'},{id:'e6',l:'Prateleiras'},{id:'e7',l:'Cadeiras'}
+  ]},
+  { id:'banheiro', name:'Banheiro Social', emoji:'🚿', items:[
+    {id:'b1',l:'Gabinete'},{id:'b2',l:'Porta-shampoo'},{id:'b3',l:'Porta-toalhas'}
+  ]},
+  { id:'quarto', name:'Quarto', emoji:'🛏️', items:[
+    {id:'q1',l:'Colchão'},{id:'q2',l:'TV'},{id:'q3',l:'Ventilador'}
+  ]}
+];
+
+const KEY = 'mudanca_v1';
+let checked = {};
+let openRooms = { cozinha: true };
+let filter = 'all';
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) { const d = JSON.parse(raw); checked = d.checked||{}; openRooms = d.openRooms||{cozinha:true}; }
+  } catch(e) {}
+}
+
+function saveState() {
+  try { localStorage.setItem(KEY, JSON.stringify({ checked, openRooms })); } catch(e) {}
+}
+
+function toggle(id) {
+  checked[id] = !checked[id];
+  saveState();
+  render();
+}
+
+function toggleRoom(id) {
+  openRooms[id] = !openRooms[id];
+  saveState();
+  render();
+}
+
+function setFilter(f, el) {
+  filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function share() {
+  const url = window.location.href.split('?')[0];
+  const all = ROOMS.flatMap(r => r.items);
+  const done = all.filter(i => checked[i.id]).length;
+  const pct = all.length ? Math.round(done/all.length*100) : 0;
+  const text = `🏠 *Lista da Mudança* — ${pct}% concluído (${done}/${all.length} itens)\n\nAcompanhe aqui: ${url}`;
+  if (navigator.share) {
+    navigator.share({ title: 'Lista da Mudança', text, url }).catch(()=>{});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showToast('Link copiado! Cole no WhatsApp 📋'));
+  } else {
+    const wa = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(wa, '_blank');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function render() {
+  const allItems = ROOMS.flatMap(r => r.items);
+  const total = allItems.length;
+  const done = allItems.filter(i => checked[i.id]).length;
+  const pct = total ? Math.round(done/total*100) : 0;
+
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-done').textContent = done;
+  document.getElementById('s-left').textContent = total - done;
+  document.getElementById('main-fill').style.width = pct + '%';
+  document.getElementById('main-pct').textContent = pct + '%';
+
+  const list = document.getElementById('rooms-list');
+  let html = '';
+
+  ROOMS.forEach(r => {
+    const filtered = r.items.filter(it => {
+      if (filter === 'done') return checked[it.id];
+      if (filter === 'pending') return !checked[it.id];
+      return true;
+    });
+    if (!filtered.length) return;
+
+    const rDone = r.items.filter(i => checked[i.id]).length;
+    const rPct = r.items.length ? Math.round(rDone/r.items.length*100) : 0;
+    const isOpen = !!openRooms[r.id];
+
+    html += `<div class="room-card">
+      <div class="room-head" onclick="toggleRoom('${r.id}')">
+        <span class="room-emoji">${r.emoji}</span>
+        <div class="room-info">
+          <div class="room-name">${r.name}</div>
+          <div class="room-meta">${rDone} de ${r.items.length} comprados</div>
+        </div>
+        <div class="room-mini-bar">
+          <span class="room-pct">${rPct}%</span>
+          <div class="mini-track"><div class="mini-fill" style="width:${rPct}%"></div></div>
+        </div>
+        <svg class="chevron ${isOpen?'open':''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="room-items ${isOpen?'open':''}">`;
+
+    filtered.forEach((it, idx) => {
+      const on = !!checked[it.id];
+      html += `<div class="item-row" onclick="toggle('${it.id}')">
+        <div class="cb ${on?'on':''}">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="item-text ${on?'done':''}">${it.l}</span>
+        ${it.opt ? '<span class="badge-opt">opcional</span>' : ''}
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  if (!html) {
+    html = `<div class="empty"><div class="empty-icon">${filter==='done'?'🎉':'✅'}</div>${filter==='done'?'Nenhum item comprado ainda.':'Tudo comprado!'}</div>`;
+  }
+
+  list.innerHTML = html;
+}
+
+loadState();
+render();
+</script>
+</body>
+</html>
